@@ -1,43 +1,49 @@
-import { FraudDetectorSystemInterface } from './src/fraudDetectorSystemInterface';
+import { FraudDetectorSystemInterface } from './fraudDetectorSystemInterface';
 
 export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
-    private userTransactions: Map<string, number[]>;
+    // TODO: Define aquí las propiedades privadas de tu clase (como tus Maps o arreglos)
 
     constructor() {
         super();
-        this.userTransactions = new Map<string, number[]>();
-    }
-
-    public addTransaction(userId: string, amount: number): number {
-        if (!this.userTransactions.has(userId)) {
-            this.userTransactions.set(userId, []);
-        }
-        this.userTransactions.get(userId)!.push(amount);
-        return this.getBalance(userId);
-    }
-
-    public getBalance(userId: string): number {
-        const transactions = this.userTransactions.get(userId);
-        if (!transactions) return 0;
-        return transactions.reduce((sum, current) => sum + current, 0);
+        // TODO: Inicializa tus estructuras de datos aquí
     }
 
     // =========================================================================
-    // RETO NIVEL 2: Implementa la Mediana (Leftmost integer si es par)
-    // Complejidad esperada: O(n log n) por el ordenamiento interno
+    // 🚧 RETO NIVEL 1: POR RESOLVER
+    // Debe añadir el monto al usuario y retornar el total acumulado de ese usuario.
+    // =========================================================================
+    public addTransaction(userId: string, amount: number): number {
+        // TODO: Implementa tu solución aquí
+        return 0;
+    }
+
+    // =========================================================================
+    // 🚧 RETO NIVEL 1: POR RESOLVER
+    // Retorna el gasto total acumulado de un usuario. Si no existe, retorna 0.
+    // =========================================================================
+    public getBalance(userId: string): number {
+        // TODO: Implementa tu solución aquí
+        return 0;
+    }
+
+    // =========================================================================
+    // 🚧 RETO NIVEL 2: POR RESOLVER
+    // Calcula la mediana del usuario. Si es par, aplica "leftmost integer".
+    // Si el usuario no existe o no tiene transacciones, retorna null.
+    // Recuerda: No mutar el orden del arreglo original si lo guardaste en un Map.
     // =========================================================================
     public getMedianSpent(userId: string): number | null {
-        // TODO: Implementar
+        // TODO: Implementa tu solución aquí
         return null;
     }
 
     // =========================================================================
-    // RETO NIVEL 3: Obtener los 'k' usuarios que más dinero total han gastado
-    // Si hay empate en montos, ordenar alfabéticamente por userId de menor a mayor.
-    // Complejidad esperada: O(u log u) donde u es la cantidad de usuarios únicos
+    // 🚧 RETO NIVEL 3: POR RESOLVER
+    // Retorna el top 'k' de usuarios con mayor gasto acumulado.
+    // En caso de empate en montos, ordenar alfabéticamente (A-Z) por userId.
     // =========================================================================
     public getTopSpenders(k: number): string[] {
-        // TODO: Implementar
+        // TODO: Implementa tu solución aquí
         return [];
     }
 }
