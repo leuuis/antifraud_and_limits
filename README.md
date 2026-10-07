@@ -153,3 +153,12 @@ Modify the existing system to support the following updated and new operations:
 
 * `addTransactionWithTime(userId: string, amount: number, timestamp: number): number` — Registers a transaction. Before returning the total cumulative balance, it must drop/expire any transactions for this user that are older than `timestamp - 60000` (1-minute rolling window). Returns the updated active balance.
 * `getTopSpendersAtTime(k: number, currentTimestamp: number): string[]` — Returns the top `k` spenders considering **ONLY** the transactions across the entire system that are currently active (age <= 60,000ms relative to `currentTimestamp`). Ties are still broken alphabetically.
+
+## 🚀 Key Takeaways & Performance Optimizations
+
+This repository was developed as a progressive coding challenge to simulate production-grade financial systems. Below are the key architectural decisions and performance optimizations implemented throughout the levels:
+
+* **Data Structure Selection:** Utilized Native JavaScript `Map` objects for O(1) lookups when tracking cumulative balances and transaction history per user, ensuring the system remains scalable under a high volume of concurrent data.
+* **Algorithmic Efficiency:** Maintained a strict worst-case time complexity of \(O(n \log n)\) across statistical operations. For instance, the user median spend evaluation was engineered to handle sorting boundaries safely without corrupting chronological transaction logs.
+* **Pipeline Optimization:** Boosted runtime performance during data manipulation by strategic method chaining. Reordered execution flows—such as triggering slicing boundaries before mapping operations—to ensure the application processes the minimum possible payload in memory.
+* **Enterprise-Grade Testing:** Implemented a robust automated testing suite using `Vitest` to enforce strict regression control, validate edge cases (such as tied spending balances and empty states), and guarantee structural integrity.
