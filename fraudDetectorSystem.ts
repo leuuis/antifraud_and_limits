@@ -22,8 +22,6 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
 
         this.userTransactions.get(userId)?.push(amount);
 
-        this.userTransactions.get(userId)?.sort((a, b) => a - b); // Ordenar los montos de menor a mayor
-
         return this.getBalance(userId);
     }
 
