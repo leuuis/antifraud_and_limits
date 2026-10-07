@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import FraudDetectorSystem from '../fraudDetectorSystem';
 
-describe('Airbnb Fraud Detector System - CodeSignal Simulation', () => {
+describe('Fraud Detector System - Simulation', () => {
     let system: FraudDetectorSystem;
 
     beforeEach(() => {
