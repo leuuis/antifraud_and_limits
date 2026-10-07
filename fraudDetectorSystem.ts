@@ -1,17 +1,22 @@
 import { FraudDetectorSystemInterface } from './fraudDetectorSystemInterface';
 
+interface TransactionRecord { // Define la interfaz para representar una transacción con timestamp
+    amount: number;
+    timestamp: number;
+}
+
 export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // TODO: Define aquí las propiedades privadas de tu clase (como tus Maps o arreglos)
-    private userTransactions = new Map<string, number[]>;
+    private userTransactions = new Map<string, TransactionRecord[]>; // Mapa para almacenar transacciones por usuario, cada transacción incluye monto y timestamp
 
     constructor() {
         super();
         // TODO: Inicializa tus estructuras de datos aquí
-        this.userTransactions = new Map<string, number[]>();
+        this.userTransactions = new Map<string, TransactionRecord[]>(); // Inicializa el mapa de transacciones por usuario
     }
 
     // =========================================================================
-    // 🚧 RETO NIVEL 1: POR RESOLVER
+    // 🚧 RETO NIVEL 1: RESUELTO
     // Debe añadir el monto al usuario y retornar el total acumulado de ese usuario.
     // =========================================================================
     public addTransaction(userId: string, amount: number): number {
@@ -20,15 +25,13 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             this.userTransactions.set(userId, []);
         }
 
-        this.userTransactions.get(userId)?.push(amount);
-
-        this.userTransactions.get(userId)?.sort((a, b) => a - b); // Ordenar los montos de menor a mayor
+        this.userTransactions.get(userId)?.push({ amount, timestamp: Date.now() }); // Simulamos un timestamp actual para las transacciones sin tiempo específico
 
         return this.getBalance(userId);
     }
 
     // =========================================================================
-    // 🚧 RETO NIVEL 1: POR RESOLVER
+    // 🚧 RETO NIVEL 1: RESUELTO
     // Retorna el gasto total acumulado de un usuario. Si no existe, retorna 0.
     // =========================================================================
     public getBalance(userId: string): number {
@@ -38,7 +41,7 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             return 0;
         }
 
-        const total = transactions.reduce((acc, curr) => acc + curr, 0);
+        const total = transactions.reduce((acc, tx) => acc + tx.amount, 0); // Accedemos a la propiedad 'amount' de cada transacción para calcular el total
 
         return total;
     }
