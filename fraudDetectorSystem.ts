@@ -56,9 +56,10 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             return null;
         }
 
-        const midIndex = Math.floor((transactions.length - 1) / 2);
+        const sortedTransactions = [...transactions].sort((a, b) => a - b); // Clonar y ordenar los montos de menor a mayor para no alterar el historial original
+        const midIndex = Math.floor((sortedTransactions.length - 1) / 2);
 
-        return transactions[midIndex];
+        return sortedTransactions[midIndex];
     }
 
     // =========================================================================
