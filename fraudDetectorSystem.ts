@@ -41,13 +41,11 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             return 0;
         }
 
-        const total = transactions.reduce((acc, tx) => acc + tx.amount, 0); // Accedemos a la propiedad 'amount' de cada transacción para calcular el total
-
-        return total;
+        return transactions.reduce((acc, tx) => acc + tx.amount, 0); // Accedemos a la propiedad 'amount' de cada transacción para calcular el total
     }
 
     // =========================================================================
-    // 🚧 RETO NIVEL 2: POR RESOLVER
+    // 🚧 RETO NIVEL 2: RESUELTO
     // Calcula la mediana del usuario. Si es par, aplica "leftmost integer".
     // Si el usuario no existe o no tiene transacciones, retorna null.
     // Recuerda: No mutar el orden del arreglo original si lo guardaste en un Map.
@@ -59,10 +57,11 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             return null;
         }
 
-        const sortedTransactions = [...transactions].sort((a, b) => a - b); // Clonar y ordenar los montos de menor a mayor para no alterar el historial original
+        // Se accede correctamente a la propiedad 'amount' de cada transacción para calcular la mediana
+        const sortedTransactions = [...transactions].sort((a, b) => a.amount - b.amount); // Clonar y ordenar los montos de menor a mayor para no alterar el historial original
         const midIndex = Math.floor((sortedTransactions.length - 1) / 2);
 
-        return sortedTransactions[midIndex];
+        return sortedTransactions[midIndex].amount; // Retornar la propiedad 'amount' de la transacción en la posición media, aplicando la regla "leftmost" para casos pares
     }
 
     // =========================================================================
