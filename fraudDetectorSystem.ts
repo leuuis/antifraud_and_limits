@@ -2,10 +2,12 @@ import { FraudDetectorSystemInterface } from './fraudDetectorSystemInterface';
 
 export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // TODO: Define aquí las propiedades privadas de tu clase (como tus Maps o arreglos)
+    private userTransactions = new Map<string, number[]>;
 
     constructor() {
         super();
         // TODO: Inicializa tus estructuras de datos aquí
+        this.userTransactions = new Map<string, number[]>();
     }
 
     // =========================================================================
@@ -14,7 +16,15 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // =========================================================================
     public addTransaction(userId: string, amount: number): number {
         // TODO: Implementa tu solución aquí
-        return 0;
+        if (!this.userTransactions.has(userId)) {
+            this.userTransactions.set(userId, []);
+        }
+
+        this.userTransactions.get(userId)?.push(amount);
+
+        this.userTransactions.get(userId)?.sort((a, b) => a - b); // Ordenar los montos de menor a mayor
+
+        return this.getBalance(userId);
     }
 
     // =========================================================================
@@ -23,7 +33,14 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // =========================================================================
     public getBalance(userId: string): number {
         // TODO: Implementa tu solución aquí
-        return 0;
+        const transactions = this.userTransactions.get(userId);
+        if (!transactions || transactions.length === 0) {
+            return 0;
+        }
+
+        const total = transactions.reduce((acc, curr) => acc + curr, 0);
+
+        return total;
     }
 
     // =========================================================================
