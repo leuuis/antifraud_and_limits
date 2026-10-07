@@ -65,7 +65,7 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     }
 
     // =========================================================================
-    // 🚧 RETO NIVEL 3: POR RESOLVER
+    // 🚧 RETO NIVEL 3: RESUELTO
     // Retorna el top 'k' de usuarios con mayor gasto acumulado.
     // En caso de empate en montos, ordenar alfabéticamente (A-Z) por userId.
     // =========================================================================
@@ -74,9 +74,10 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
         if (k < 1 || this.userTransactions.size === 0) {
             return [];
         }
+
         return Array.from(this.userTransactions.entries())
             .map(([userId, transactions]) => {
-                const totalSpent = transactions.reduce((acc, curr) => acc + curr, 0);
+                const totalSpent = transactions.reduce((acc, curr) => acc + curr.amount, 0);
                 return { userId, totalSpent };
             })
             .sort((a, b) => {
