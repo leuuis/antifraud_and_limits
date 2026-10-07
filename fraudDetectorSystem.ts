@@ -68,6 +68,27 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // =========================================================================
     public getTopSpenders(k: number): string[] {
         // TODO: Implementa tu solución aquí
-        return [];
+        if (k < 1 || this.userTransactions.size === 0) {
+            return [];
+        }
+
+        const spenders: { userId: string; totalSpent: number }[] = [];
+
+        for (const [userId] of this.userTransactions.entries()) {
+            const totalSpent = this.getBalance(userId);
+            spenders.push({ userId, totalSpent });
+        }
+
+        spenders.sort((a, b) => {
+            if (b.totalSpent !== a.totalSpent) {
+                return b.totalSpent - a.totalSpent; // Ordenar por gasto total descendente
+            }
+
+            return a.userId.localeCompare(b.userId); // Ordenar alfabéticamente en caso de empate
+        })
+
+        const topSpenders = spenders.slice(0, k);
+
+        return topSpenders.map(s => s.userId);
     }
 }
