@@ -141,3 +141,15 @@ getTopSpenders(1) // returns ["user_B"] (Absolute highest spender)
 getTopSpenders(3) // returns ["user_B", "user_A", "user_C"] 
                   // Note: user_A and user_C tied at 50, so "user_A" comes before "user_C" alphabetically.
 ```
+
+## 📋 LEVEL 4: Transaction Expiry & Rolling Fraud Windows (Progressive Unlocked 🔓)
+
+### Description
+To prevent stale data from triggering false fraud alerts, the infrastructure layer must now support an automatic Time-To-Live (TTL) expiration mechanism. Every transaction will now include a `timestamp` integer (representing epoch milliseconds). 
+
+A transaction is considered "Active" only if it was recorded within the last **X milliseconds** relative to the current query's timestamp. Any transaction older than the allowed window must be ignored in all balance, median, and top spender calculations.
+
+Modify the existing system to support the following updated and new operations:
+
+* `addTransactionWithTime(userId: string, amount: number, timestamp: number): number` — Registers a transaction. Before returning the total cumulative balance, it must drop/expire any transactions for this user that are older than `timestamp - 60000` (1-minute rolling window). Returns the updated active balance.
+* `getTopSpendersAtTime(k: number, currentTimestamp: number): string[]` — Returns the top `k` spenders considering **ONLY** the transactions across the entire system that are currently active (age <= 60,000ms relative to `currentTimestamp`). Ties are still broken alphabetically.
