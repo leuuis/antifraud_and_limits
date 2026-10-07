@@ -153,6 +153,6 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
                 return a.userId.localeCompare(b.userId); // Ordenar alfabéticamente en caso de empate
             });
 
-        return filteredActiveSpenders.map(spender => spender.userId).slice(0, k); // Retornamos los userIds de los top 'k' spenders activos
+        return filteredActiveSpenders.slice(0, k).map(spender => spender.userId); // Retornamos los userIds de los top 'k' spenders activos
     }
 }
