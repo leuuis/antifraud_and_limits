@@ -51,7 +51,14 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // =========================================================================
     public getMedianSpent(userId: string): number | null {
         // TODO: Implementa tu solución aquí
-        return null;
+        const transactions = this.userTransactions.get(userId);
+        if (!transactions || transactions.length === 0) {
+            return null;
+        }
+
+        const midIndex = Math.floor((transactions.length - 1) / 2);
+
+        return transactions[midIndex];
     }
 
     // =========================================================================
