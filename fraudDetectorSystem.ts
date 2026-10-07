@@ -8,6 +8,7 @@ interface TransactionRecord { // Define la interfaz para representar una transac
 export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     // TODO: Define aquí las propiedades privadas de tu clase (como tus Maps o arreglos)
     private userTransactions = new Map<string, TransactionRecord[]>; // Mapa para almacenar transacciones por usuario, cada transacción incluye monto y timestamp
+    private readonly TIME_WINDOW_MS = 60_000; // Constante para la ventana de tiempo de 60,000ms (1 minuto)
 
     constructor() {
         super();
@@ -91,7 +92,7 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     }
 
     // =========================================================================
-    // 🚧 CHALLENGE NIVEL 4: UNSOLVED 🚧
+    // 🚧 CHALLENGE NIVEL 4: SOLVED 🚧
     // El sistema arrojará error de compilación hasta que implementes estos contratos.
     // =========================================================================
 
@@ -101,7 +102,20 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
      */
     public addTransactionWithTime(userId: string, amount: number, timestamp: number): number {
         // TODO: Implementa tu solución aquí para el Nivel 4
-        return 0;
+        // TODO: Implementa tu solución aquí
+        if (!this.userTransactions.has(userId)) {
+            this.userTransactions.set(userId, []);
+        }
+
+        // Registramos la transacción con el timestamp proporcionado
+        const userLog = this.userTransactions.get(userId)!;
+        userLog.push({ amount, timestamp: timestamp });
+
+        // Filtramos las transacciones activas dentro de la ventana de tiempo de 60,000ms
+        const activeTransactions = userLog.filter(tx => (timestamp - tx.timestamp) <= this.TIME_WINDOW_MS);
+
+        // Retornamos el balance activo sumando los montos de las transacciones activas
+        return activeTransactions.reduce((acc, curr) => acc + curr.amount, 0);
     }
 
     /**
@@ -110,6 +124,35 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
      */
     public getTopSpendersAtTime(k: number, currentTimestamp: number): string[] {
         // TODO: Implementa tu solución aquí para el Nivel 4
-        return [];
+        if (k < 1 || this.userTransactions.size === 0) return [];
+
+        // Extraemos las entradas a un array para poder filtrarlas y ordenarlas sin alterar el Map original
+        const entries = Array.from(this.userTransactions.entries());
+
+        // Creamos un array de objetos con userId y su gasto activo dentro de la ventana de tiempo
+        const activeSpenders = entries.map(([userId, transactions]) => {
+
+            const activeTransactions = transactions // Filtramos las transacciones activas dentro de la ventana de tiempo de 60,000ms
+                .filter(tx => ((currentTimestamp - tx.timestamp) <= this.TIME_WINDOW_MS));
+
+            const totalActiveSpent = activeTransactions // Sumamos los montos de las transacciones activas para obtener el gasto total activo del usuario
+                .reduce((acc, curr) => acc + curr.amount, 0);
+
+            return { userId, totalActiveSpent }; // Retornamos un objeto con el userId y su gasto activo total
+        });
+
+        // Filtramos los usuarios que tienen gasto activo mayor a 0 y ordenamos por gasto total descendente y alfabéticamente en caso de empate
+        const filteredActiveSpenders = activeSpenders
+            .filter(spender => spender.totalActiveSpent > 0);
+
+        filteredActiveSpenders
+            .sort((a, b) => {
+                if (b.totalActiveSpent !== a.totalActiveSpent) {
+                    return b.totalActiveSpent - a.totalActiveSpent; // Ordenar por gasto total descendente
+                }
+                return a.userId.localeCompare(b.userId); // Ordenar alfabéticamente en caso de empate
+            });
+
+        return filteredActiveSpenders.map(spender => spender.userId).slice(0, k); // Retornamos los userIds de los top 'k' spenders activos
     }
 }
