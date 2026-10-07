@@ -86,4 +86,27 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             .slice(0, k)
             .map(spender => spender.userId)
     }
+
+    // =========================================================================
+    // 🚧 CODESIGNAL INYECTA ESTO EN BLANCO AL INICIAR EL NIVEL 4 🚧
+    // El sistema arrojará error de compilación hasta que implementes estos contratos.
+    // =========================================================================
+
+    /**
+     * Should register a transaction with a timestamp and return the updated 
+     * active balance for the user within a 60,000ms rolling window.
+     */
+    public addTransactionWithTime(userId: string, amount: number, timestamp: number): number {
+        // TODO: Implementa tu solución aquí para el Nivel 4
+        return 0;
+    }
+
+    /**
+     * Should return the top 'k' spenders considering ONLY active transactions
+     * across the system relative to the currentTimestamp.
+     */
+    public getTopSpendersAtTime(k: number, currentTimestamp: number): string[] {
+        // TODO: Implementa tu solución aquí para el Nivel 4
+        return [];
+    }
 }
