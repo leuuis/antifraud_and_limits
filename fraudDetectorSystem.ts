@@ -56,9 +56,10 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
             return null;
         }
 
-        const midIndex = Math.floor((transactions.length - 1) / 2);
+        const sortedTransactions = [...transactions].sort((a, b) => a - b); // Clonar y ordenar los montos de menor a mayor para no alterar el historial original
+        const midIndex = Math.floor((sortedTransactions.length - 1) / 2);
 
-        return transactions[midIndex];
+        return sortedTransactions[midIndex];
     }
 
     // =========================================================================
@@ -71,24 +72,18 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
         if (k < 1 || this.userTransactions.size === 0) {
             return [];
         }
-
-        const spenders: { userId: string; totalSpent: number }[] = [];
-
-        for (const [userId] of this.userTransactions.entries()) {
-            const totalSpent = this.getBalance(userId);
-            spenders.push({ userId, totalSpent });
-        }
-
-        spenders.sort((a, b) => {
-            if (b.totalSpent !== a.totalSpent) {
-                return b.totalSpent - a.totalSpent; // Ordenar por gasto total descendente
-            }
-
-            return a.userId.localeCompare(b.userId); // Ordenar alfabéticamente en caso de empate
-        })
-
-        const topSpenders = spenders.slice(0, k);
-
-        return topSpenders.map(s => s.userId);
+        return Array.from(this.userTransactions.entries())
+            .map(([userId, transactions]) => {
+                const totalSpent = transactions.reduce((acc, curr) => acc + curr, 0);
+                return { userId, totalSpent };
+            })
+            .sort((a, b) => {
+                if (b.totalSpent !== a.totalSpent) {
+                    return b.totalSpent - a.totalSpent; // Ordenar por gasto total descendente
+                }
+                return a.userId.localeCompare(b.userId); // Ordenar alfabéticamente en caso de empate
+            })
+            .slice(0, k)
+            .map(spender => spender.userId)
     }
 }
