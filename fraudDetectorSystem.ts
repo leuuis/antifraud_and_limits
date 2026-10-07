@@ -88,7 +88,7 @@ export default class FraudDetectorSystem extends FraudDetectorSystemInterface {
     }
 
     // =========================================================================
-    // 🚧 CODESIGNAL INYECTA ESTO EN BLANCO AL INICIAR EL NIVEL 4 🚧
+    // 🚧 CHALLENGE NIVEL 4: UNSOLVED 🚧
     // El sistema arrojará error de compilación hasta que implementes estos contratos.
     // =========================================================================
 
