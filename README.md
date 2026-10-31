@@ -46,6 +46,12 @@ Modo observador durante desarrollo:
 npx vitest
 ```
 
+Si prefieres puedes verificar coverage:
+
+```bash
+npx vitest run  --coverage
+```
+
 ## Estructura principal
 
 ```txt
